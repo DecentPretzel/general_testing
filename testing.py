@@ -8,10 +8,7 @@
 ##python3 testing.py
 #To then run the locally running site in ngrok, open another terminal and enter this: ngrok http 5000
 
-#To make a change to the live site, save the change in the Python code first, then open a terminal and enter the following...
-##git add .
-##git commit -m "."
-##git push
+#To make a change to the live site, save the change in the Python code first, then open a terminal and enter this: git deploy
 
 
 
