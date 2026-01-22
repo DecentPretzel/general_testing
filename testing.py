@@ -54,8 +54,6 @@ def get_persuasion():
 
 
 
-
-
 #Determine topic change
 def get_topic_change(lull, age):
     topic_change_roll = random.randint(0, 100)
