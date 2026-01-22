@@ -35,6 +35,7 @@ def get_behavior():
     if opinion == "new": get_agreement()
     else: agreement_ins = ""
     if opinion == "old_conflicting": get_persuasion()
+    return agreement_ins
 
 
 
@@ -58,7 +59,8 @@ def get_persuasion():
     persuasion_success = random.choice([True, False])
     if persuasion_success:
         persuasion_level = random.choice([25, 50, 75])
-        if persuasion_
+    return persuasion_success
+
 
 
 
