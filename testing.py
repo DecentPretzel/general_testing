@@ -21,7 +21,7 @@ import random
 #Create human-visible site template upon opening site
 @app.route("/")
 def index():
-    return render_template("Site.html", word="Heyo.")
+    return render_template("Site.html", word="'Sup'.")
 
 
 
