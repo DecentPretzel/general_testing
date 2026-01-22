@@ -34,10 +34,11 @@ def get_behavior():
     age = data.get("age")
     if opinion == "new":
         agreement_ins = get_agreement()["ins"]
-    else: agreement_ins = ""
-    if opinion == "old_conflicting":
+    elif opinion == "old_conflicting":
         persuasion_ins = get_persuasion()["ins"]
-    else: persuasion_ins = ""
+    else:
+        agreement_ins = ""
+        persuasion_ins = ""
     topic_change_ins = get_topic_change(lull, age)["ins"]
     behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
     return jsonify({"behavior_instructions": behavior_instructions})
