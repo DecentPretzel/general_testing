@@ -21,7 +21,7 @@ import random
 #Create human-visible site template upon opening site
 @app.route("/")
 def index():
-    return render_template("Site.html", word="'Sup'.")
+    return render_template("Site.html", word="Hello world.")
 
 
 
@@ -32,34 +32,44 @@ def get_behavior():
     opinion = data.get("opinion")
     lull = data.get("lull")
     age = data.get("age")
-    if opinion == "new": get_agreement()
+    if opinion == "new":
+        get_agreement()
+        agreement_ins = get_agreement()["ins"]
     else: agreement_ins = ""
-    if opinion == "old_conflicting": get_persuasion()
-    return agreement_ins
+    if opinion == "old_conflicting":
+        get_persuasion()
+        persuasion_ins = get_persuasion()["ins"]
+    else: persuasion_ins = ""
+    return
 
 
 
 #Determine agreement
 def get_agreement():
     normal_agreement_roll = random.randint(0, 100)
-    if normal_agreement_roll <= 65: agreement_ins = ""
+    if normal_agreement_roll <= 65: ins = ""
     else:
         agreement_level = random.choice([0, 25, 50, 75])
         match agreement_level:
-            case 0: agreement_ins = "Have your character fully disagree with the opinion of the user's character."
-            case 25: agreement_ins = "Have your character mostly disagree with the opinion of the user's character."
-            case 50: agreement_ins = "Have your character half-agree with the opinion of the user's character."
-            case 75: agreement_ins = "Have your character mostly agree with the opinion of the user's character, but not fully."
-    return {"agreement_ins": agreement_ins}
+            case 0: ins = "Have your character fully disagree with the opinion of the user's character."
+            case 25: ins = "Have your character mostly disagree with the opinion of the user's character."
+            case 50: ins = "Have your character half-agree with the opinion of the user's character."
+            case 75: ins = "Have your character mostly agree with the opinion of the user's character, but not fully."
+    return {"ins": ins}
 
 
 
 #Determine persuasion
 def get_persuasion():
-    persuasion_success = random.choice([True, False])
-    if persuasion_success:
+    persuasion_success_roll = random.randint(0, 100)
+    if persuasion_success_roll <= 50:
         persuasion_level = random.choice([25, 50, 75])
-    return persuasion_success
+        match persuasion_level:
+            case 25: ins = "Have your character be persuaded by the opinion of the user's character, but only slightly."
+            case 50: ins = "Have your character be half-persuaded by the opinion of the user's character."
+            case 75: ins = "Have your character be mostly persuaded by the opinion of the user's character, but not fully."
+    else ins = ""
+    return {"ins": ins}
 
 
 
