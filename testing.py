@@ -25,28 +25,6 @@ def index():
 
 
 
-#Master behavior function
-@app.route("/get_behavior", methods=["POST"])
-def get_behavior():
-    data = request.get_json()
-    opinion = data.get("opinion")
-    lull = data.get("lull")
-    age = data.get("age")
-    if opinion == "new":
-        get_agreement()
-        agreement_ins = get_agreement()["ins"]
-    else: agreement_ins = ""
-    if opinion == "old_conflicting":
-        get_persuasion()
-        persuasion_ins = get_persuasion()["ins"]
-    else: persuasion_ins = ""
-    get_topic_change(lull, age)
-    topic_change_ins = get_topic_change()["ins"]
-    behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
-    return jsonify({"behavior_instructions": behavior_instructions})
-
-
-
 #Determine agreement
 def get_agreement():
     normal_agreement_roll = random.randint(0, 100)
@@ -121,6 +99,29 @@ def get_topic_change(lull, age):
                 ins = f"Have your character mention a complaint regarding something they wish the player's character would do differently or better - {bias_ins}don't have your character introduce this topic with the word \"complain\" or \"complaint\", don't have your character repeat a previous complaint, and ensure that this new topic fits the current mood. "
     else: ins = ""
     return {"ins": ins}
+
+
+
+#Master behavior function
+@app.route("/get_behavior", methods=["POST"])
+def get_behavior():
+    data = request.get_json()
+    opinion = data.get("opinion")
+    lull = data.get("lull")
+    age = data.get("age")
+    if opinion == "new":
+        get_agreement()
+        agreement_ins = get_agreement()["ins"]
+    else: agreement_ins = ""
+    if opinion == "old_conflicting":
+        get_persuasion()
+        persuasion_ins = get_persuasion()["ins"]
+    else: persuasion_ins = ""
+    get_topic_change(lull, age)
+    topic_change_ins = get_topic_change()["ins"]
+    behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
+    return jsonify({"behavior_instructions": behavior_instructions})
+
 
 
 
