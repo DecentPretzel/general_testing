@@ -21,7 +21,7 @@ import random
 #Create human-visible site template upon opening site
 @app.route("/")
 def index():
-    return render_template("Site.html", word="no reminders.")
+    return render_template("Site.html", word="lull.")
 
 
 #Master behavior function
@@ -29,7 +29,7 @@ def index():
 def get_behavior():
     data = request.get_json()
     opinion = data.get("opinion")
-    only_affirmation = bool(data.get("only_affirmation"))
+    only_affirmation = bool(data.get("lull"))
     age = data.get("age")
     if opinion == "new": agreement_ins = get_agreement()["ins"]
     else: agreement_ins = ""
