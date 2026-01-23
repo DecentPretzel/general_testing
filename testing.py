@@ -21,7 +21,7 @@ import random
 #Create human-visible site template upon opening site
 @app.route("/")
 def index():
-    return render_template("Site.html", word="a sorta reminder.")
+    return render_template("Site.html", word="no reminders.")
 
 
 #Master behavior function
@@ -38,8 +38,8 @@ def get_behavior():
         if opinion == "old_conflicting": persuasion_ins = get_persuasion()["ins"]
         else: persuasion_ins = ""
         topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
-        behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}Ensure that you also follow ALL steps in Behavior.docx in your next message too."
-    else: behavior_instructions = "Ensure that you also follow ALL steps in Behavior.docx in your next message too."
+        behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
+    else: behavior_instructions = ""
     return jsonify({"behavior_instructions": behavior_instructions})
 
 
