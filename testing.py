@@ -21,7 +21,7 @@ import random
 #Create human-visible site template upon opening site
 @app.route("/")
 def index():
-    return render_template("Site.html", word="Hey hey.")
+    return render_template("Site.html", word="Yo and 'sup.")
 
 
 
@@ -31,14 +31,14 @@ def get_behavior():
     data = request.get_json()
     in_character = data.get("in_character")
     opinion = data.get("opinion")
-    lull = data.get("lull")
+    only_affirmation = data.get("only_affirmation")
     age = data.get("age")
     if in_character:
         if opinion == "new": agreement_ins = get_agreement()["ins"]
         else: agreement_ins = ""
         if opinion == "old_conflicting": persuasion_ins = get_persuasion()["ins"]
         else: persuasion_ins = ""
-        topic_change_ins = get_topic_change(lull, age)["ins"]
+        topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
         behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
     else: behavior_instructions = ""
     return jsonify({"behavior_instructions": behavior_instructions})
@@ -75,9 +75,9 @@ def get_persuasion():
 
 
 #Determine topic change
-def get_topic_change(lull, age):
+def get_topic_change(only_affirmation, age):
     topic_change_roll = random.randint(0, 100)
-    if (lull and topic_change_roll <= 90) or (lull == False and topic_change_roll <= 30):
+    if (only_affirmation and topic_change_roll <= 90) or (only_affirmation == False and topic_change_roll <= 30):
         topic_frequency_roll = random.randint(1, 100)
         if topic_frequency_roll <= 45:
             new_topic = random.choice(["recent_story", "vent", "question"])
