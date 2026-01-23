@@ -28,18 +28,15 @@ def index():
 @app.route("/get_behavior", methods=["POST"])
 def get_behavior():
     data = request.get_json()
-    in_character = bool(data.get("in_character"))
     opinion = data.get("opinion")
     only_affirmation = bool(data.get("only_affirmation"))
     age = data.get("age")
-    if in_character:
-        if opinion == "new": agreement_ins = get_agreement()["ins"]
-        else: agreement_ins = ""
-        if opinion == "old_conflicting": persuasion_ins = get_persuasion()["ins"]
-        else: persuasion_ins = ""
-        topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
-        behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
-    else: behavior_instructions = ""
+    if opinion == "new": agreement_ins = get_agreement()["ins"]
+    else: agreement_ins = ""
+    if opinion == "old_conflicting": persuasion_ins = get_persuasion()["ins"]
+    else: persuasion_ins = ""
+    topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
+    behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
     return jsonify({"behavior_instructions": behavior_instructions})
 
 
