@@ -29,13 +29,13 @@ def index():
 def get_behavior():
     data = request.get_json()
     opinion = data.get("opinion")
-    only_affirmation = bool(data.get("lull"))
+    lull = bool(data.get("lull"))
     age = data.get("age")
     if opinion == "new": agreement_ins = get_agreement()["ins"]
     else: agreement_ins = ""
     if opinion == "old_conflicting": persuasion_ins = get_persuasion()["ins"]
     else: persuasion_ins = ""
-    topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
+    topic_change_ins = get_topic_change(lull, age)["ins"]
     behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
     return jsonify({"behavior_instructions": behavior_instructions})
 
@@ -71,9 +71,9 @@ def get_persuasion():
 
 
 #Determine topic change
-def get_topic_change(only_affirmation, age):
+def get_topic_change(lull, age):
     topic_change_roll = random.randint(0, 100)
-    if (only_affirmation and topic_change_roll <= 90) or (only_affirmation == False and topic_change_roll <= 30):
+    if (lull and topic_change_roll <= 90) or (lull == False and topic_change_roll <= 30):
         topic_frequency_roll = random.randint(1, 100)
         if topic_frequency_roll <= 45:
             new_topic = random.choice(["recent_story", "vent", "question"])
