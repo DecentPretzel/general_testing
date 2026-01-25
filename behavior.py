@@ -78,7 +78,8 @@ def get_behavior():
     else:
         topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
     #Combine and deliver instructions to GPT
-    behavior_instructions = f"{mood_ins}{agreement_ins}{persuasion_ins}{topic_change_ins}"
+    behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
+    #behavior_instructions = f"{mood_ins}{agreement_ins}{persuasion_ins}{topic_change_ins}"
     return jsonify({"behavior_instructions": behavior_instructions})
 
 
@@ -125,8 +126,7 @@ def get_mood(pleasing, angering, saddening, scaring):
             case "fear": adjective = "afraid / stressed"
         phrase = f"{adverb}{adjective}"
         emotion_descriptions.append(phrase)
-    ins = "Have your character eat a donut."
-    #ins = "Ensure that your character's behavior fits their current mood, which is: " + ", ".join(emotion_descriptions) + "."
+    ins = "Ensure that your character's behavior fits their current mood, which is: " + ", ".join(emotion_descriptions) + "."
     return {"ins": ins}
 
 
