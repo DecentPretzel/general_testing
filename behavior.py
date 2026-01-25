@@ -125,7 +125,8 @@ def get_mood(pleasing, angering, saddening, scaring):
             case "fear": adjective = "afraid / stressed"
         phrase = f"{adverb}{adjective}"
         emotion_descriptions.append(phrase)
-    ins = "Ensure that your character's behavior fits their current mood, which is: " + ", ".join(emotion_descriptions) + "."
+    ins = "Have your character eat a donut."
+    #ins = "Ensure that your character's behavior fits their current mood, which is: " + ", ".join(emotion_descriptions) + "."
     return {"ins": ins}
 
 
