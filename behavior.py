@@ -21,7 +21,7 @@ import math
 
 
 
-#Create human-visible site template upon opening site
+#Create human-visible material upon opening site
 @app.route("/")
 def index():
     return render_template("Site.html", word="Hello world.")
@@ -45,7 +45,7 @@ def get_behavior():
     if opinion == "old_conflicting": persuasion_ins = get_persuasion()["ins"]
     else: persuasion_ins = ""
     #If no farewell is said, call get_topic_change
-    if farewell == True: topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
+    if farewell == False: topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
     else: topic_change_ins = ""
     #Combine and deliver instructions to GPT
     behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
@@ -89,48 +89,52 @@ def get_persuasion():
 
 #Determine topic change
 def get_topic_change(only_affirmation, age):
-    #Roll to see if topic change will occur
-    topic_change_roll = random.randint(0, 100)
-    if (only_affirmation and topic_change_roll <= 90) or (only_affirmation == False and topic_change_roll <= 30):
-        #Roll to determine frequency tier of new topic
-        topic_frequency_roll = random.randint(1, 100)
-        if topic_frequency_roll <= 45:
-            new_topic = random.choice(["recent_story", "vent", "question"])
-        elif topic_frequency_roll <= 80:
-            new_topic = random.choice(["gossip", "hobby", "field_of_interest", "realization"])
-        else:
-            new_topic = random.choice(["old_story", "confiding_question", "compliment", "complaint"])
-        match new_topic:
-            case "recent_story": ins = "Have your character mention a story from earlier that day or recently - don't have your character introduce this topic with the word \"story\", don't have your character repeat a previous story, and ensure that this new topic fits the current mood. "
-            case "vent": ins = "Have your character vent about something - don't have your character introduce this topic with the word \"vent\", don't have your character repeat a previous vent, and ensure that this new topic fits the current mood. "
-            case "question": ins = "Have your ask a question - don't have your character introduce this question with the word \"question\", don't have your character repeat a previous question, and ensure that this question fits the current mood. "
-            case "gossip": ins = "Have your character mention gossip about one or more acquaintances - don't have your character introduce this topic with the word \"gossip\", don't have your character repeat a previous bit of gossip, and ensure that this new topic fits the current mood. "
-            case "hobby": ins = "Have your character talk about something regarding their hobby - don't have your character introduce this topic with the word \"hobby\", don't have your character repeat a previous bit about their hobby, and ensure that this new topic fits the current mood. "
-            case "field_of_interest": ins = "Have your character talk about something regarding their field of interest - don't have your character introduce this topic with the word \"field\" or \"interest\", don't have your character repeat a previous bit about their interest, and ensure that this new topic fits the current mood. "
-            case "realization": ins = "Have your character mention something they just realized - don't have your character introduce this topic with the word \"realize\", \"realization\", or any inflection of those, don't have your character repeat a previous realization, and ensure that this new topic fits the current mood. "
-            case "old_story":
-                age_in_story = random.uniform(age - age * 0.7, age - age * 0.1)
-                ins = f"Have your character mention a story from when they were {age_in_story} years old - don't have your character introduce this topic with the word \"story\", don't have your character repeat a previous story, and ensure that this new topic fits the current mood. Don't have your character mention their exact age in the story; instead, have them mention roughly how long ago it took place (i.e., \"a couple years ago\", \"a few years ago\") or when it took place (i.e., \"when I was a kid\", \"after I moved to California\", \"during the Great Depression\"). "
-            case "confiding_question": ins = "Have your character ask a question regarding something they're self-conscious about (i.e., \"Do you think I'm fat?\", \"Am I too rude?\") - don't have your character introduce this question with the word \"confide\", \"question\", or any inflection of those, don't have your character repeat a previous question, and ensure that this question fits the current mood. "
-            case "compliment":
-                bias_roll = random.randint(0, 100)
-                if bias_roll <= 45:
-                    bias_level = random.randint(1, 2)
-                    match bias_level:
-                        case 1: bias_ins = "make the compliment somewhat twinged with personal bias befitting your character, "
-                        case 2: bias_ins = "make this compliment heavily influenced by personal bias befitting your character, "
-                else: bias_ins = ""
-                ins = f"Have your character compliment the user's character - {bias_ins}don't have your character introduce this topic with the word \"compliment\", don't have your character repeat a previous compliment, and ensure that this new topic fits the current mood. "
-            case "complaint":
-                bias_roll = random.randint(0, 100)
-                if bias_roll <= 33:
-                    bias_level = random.randint(1, 2)
-                    match bias_level:
-                        case 1: bias_ins = "make the complaint somewhat twinged with personal bias befitting your character, "
-                        case 2: bias_ins = "make this complaint heavily influenced by personal bias befitting your character, "
-                else: bias_ins = ""
-                ins = f"Have your character mention a complaint regarding something they wish the player's character would do differently or better - {bias_ins}don't have your character introduce this topic with the word \"complain\" or \"complaint\", don't have your character repeat a previous complaint, and ensure that this new topic fits the current mood. "
-    else: ins = ""
+    topics = {
+        "none": 750,
+        "question": 50,
+        "confiding_question":10,
+        "compliment": 10,
+        "complaint": 10,
+        "recent_story": 10,
+        "old_story": 10,
+        "gossip": 30,
+        "hobby": 30,
+        "field_of_interest": 30,
+        "vent": 50
+    }
+    if only_affirmation: topics["none"] -= 650
+    new_topic = random.choices(list(topics.keys()), weights = list(topics.values()), k = 1)[0]
+    match new_topic:
+        case "none": ins = ""
+        case "recent_story": ins = "Have your character mention a story from earlier that day or recently - don't have your character introduce this topic with the word \"story\", don't have your character repeat a previous story, and ensure that this new topic fits the current mood. "
+        case "vent": ins = "Have your character vent about something - don't have your character introduce this topic with the word \"vent\", don't have your character repeat a previous vent, and ensure that this new topic fits the current mood. "
+        case "question": ins = "Have your ask a question - don't have your character introduce this question with the word \"question\", don't have your character repeat a previous question, and ensure that this question fits the current mood. "
+        case "gossip": ins = "Have your character mention gossip about one or more acquaintances - don't have your character introduce this topic with the word \"gossip\", don't have your character repeat a previous bit of gossip, and ensure that this new topic fits the current mood. "
+        case "hobby": ins = "Have your character talk about something regarding their hobby - don't have your character introduce this topic with the word \"hobby\", don't have your character repeat a previous bit about their hobby, and ensure that this new topic fits the current mood. "
+        case "field_of_interest": ins = "Have your character talk about something regarding their field of interest - don't have your character introduce this topic with the word \"field\" or \"interest\", don't have your character repeat a previous bit about their interest, and ensure that this new topic fits the current mood. "
+        case "realization": ins = "Have your character mention something they just realized - don't have your character introduce this topic with the word \"realize\", \"realization\", or any inflection of those, don't have your character repeat a previous realization, and ensure that this new topic fits the current mood. "
+        case "old_story":
+            age_in_story = random.uniform(age - age * 0.7, age - age * 0.1)
+            ins = f"Have your character mention a story from when they were {age_in_story} years old - don't have your character introduce this topic with the word \"story\", don't have your character repeat a previous story, and ensure that this new topic fits the current mood. Don't have your character mention their exact age in the story; instead, have them mention roughly how long ago it took place (i.e., \"a couple years ago\", \"a few years ago\") or when it took place (i.e., \"when I was a kid\", \"after I moved to California\", \"during the Great Depression\"). "
+        case "confiding_question": ins = "Have your character ask a question regarding something they're self-conscious about (i.e., \"Do you think I'm fat?\", \"Am I too rude?\") - don't have your character introduce this question with the word \"confide\", \"question\", or any inflection of those, don't have your character repeat a previous question, and ensure that this question fits the current mood. "
+        case "compliment":
+            bias_roll = random.randint(0, 100)
+            if bias_roll <= 45:
+                bias_level = random.randint(1, 2)
+                match bias_level:
+                    case 1: bias_ins = "make the compliment somewhat twinged with personal bias befitting your character, "
+                    case 2: bias_ins = "make this compliment heavily influenced by personal bias befitting your character, "
+            else: bias_ins = ""
+            ins = f"Have your character compliment the user's character - {bias_ins}don't have your character introduce this topic with the word \"compliment\", don't have your character repeat a previous compliment, and ensure that this new topic fits the current mood. "
+        case "complaint":
+            bias_roll = random.randint(0, 100)
+            if bias_roll <= 33:
+                bias_level = random.randint(1, 2)
+                match bias_level:
+                    case 1: bias_ins = "make the complaint somewhat twinged with personal bias befitting your character, "
+                    case 2: bias_ins = "make this complaint heavily influenced by personal bias befitting your character, "
+            else: bias_ins = ""
+            ins = f"Have your character mention a complaint regarding something they wish the player's character would do differently or better - {bias_ins}don't have your character introduce this topic with the word \"complain\" or \"complaint\", don't have your character repeat a previous complaint, and ensure that this new topic fits the current mood. "
     return {"ins": ins}
 
 
