@@ -52,16 +52,16 @@ def create_emotions():
 def get_behavior():
     #Gather values
     data = request.get_json()
-    pleasing_content = data.get("pleasing_content")
-    angering_content = data.get("angering_content")
-    saddening_content = data.get("saddening_content")
-    scaring_content = data.get("scaring_content")
+    pleasing = data.get("pleasing")
+    angering = data.get("angering")
+    saddening = data.get("saddening")
+    scaring = data.get("scaring")
     opinion = data.get("opinion")
     farewell = bool(data.get("farewell"))
     only_affirmation = bool(data.get("only_affirmation"))
     age = data.get("age")
     #Determine mood and get mood instruction
-    mood_ins = get_mood(pleasing_content, angering_content, saddening_content, scaring_content)["ins"]
+    mood_ins = get_mood(pleasing, angering, saddening, scaring)["ins"]
     #If new opinion is said, determine agreement and get agreement instruction
     if opinion == "new":
         agreement_ins = get_agreement()["ins"]
@@ -85,7 +85,7 @@ def get_behavior():
 
 
 #Determine mood
-def get_mood(pleasing_content, angering_content, saddening_content, scaring_content):
+def get_mood(pleasing, angering, saddening, scaring):
     #Define emotions path
     emotions_path = Path("emotions.json")
     #Create emotions JSON file if it doesn't exist yet
@@ -95,10 +95,10 @@ def get_mood(pleasing_content, angering_content, saddening_content, scaring_cont
     with open(emotions_path, "r") as f:
         emotions = json.load(f)
     #Change emotions based on role play context
-    emotions["happiness"] += pleasing_content
-    emotions["anger"] += angering_content
-    emotions["sadness"] += saddening_content
-    emotions["fear"] += scaring_content
+    emotions["happiness"] += pleasing
+    emotions["anger"] += angering
+    emotions["sadness"] += saddening
+    emotions["fear"] += scaring
     #Keep emotion values within limits
     for key in emotions:
         emotions[key] = clamp(emotions[key], 0, 39)
