@@ -25,7 +25,6 @@ def clamp(value, minimum, maximum):
 
 
 
-
 #Create human-visible material upon opening site
 @app.route("/")
 def index():
@@ -44,7 +43,6 @@ def create_emotions():
     }
     with open("emotions.json", "w") as f:
         json.dump(data, f, indent = 4)
-
 
 
 
@@ -105,7 +103,7 @@ def get_mood(pleasing_content, angering_content, saddening_content, scaring_cont
     for key in emotions:
         emotions[key] = clamp(emotions[key], 0, 39)
     #Save emotions to JSON file
-    with open("emotions.json", "w") as f: json.dump(emotions, f, indent = 4)
+    with open(emotions_path, "w") as f: json.dump(emotions, f, indent = 4)
     #Write and return mood instructions
     emotion_descriptions = []
     for emotion, value in emotions.items():
