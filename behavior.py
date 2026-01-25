@@ -128,6 +128,7 @@ def get_mood(pleasing_content, angering_content, saddening_content, scaring_cont
         phrase = f"{adverb}{adjective}"
         emotion_descriptions.append(phrase)
     ins = f"Ensure that your character's behavior fits their current mood, which is: {emotion_descriptions}"
+    return {"ins": ins}
 
 
 
