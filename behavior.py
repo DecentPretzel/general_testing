@@ -13,6 +13,8 @@
 
 
 #Basic setup
+from pathlib import Path
+import json
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 import random
@@ -21,10 +23,24 @@ import math
 
 
 
+
 #Create human-visible material upon opening site
 @app.route("/")
-def index():
-    return render_template("Site.html", word="Hello world.")
+def index(): return render_template("Site.html", word="Hello world.")
+
+
+
+
+#Write JSON file for emotions
+def write_emotions():
+    data = {
+        "happiness": 10,
+        "anger": 0,
+        "sadness": 0,
+        "fear": 0
+    }
+    with open("emotions.json", "w") as f: json.dump(data, f, indent = 4)
+
 
 
 
@@ -34,22 +50,80 @@ def index():
 def get_behavior():
     #Gather values
     data = request.get_json()
+    pleasing_content = data.get("pleasing_content")
+    angering_content = data.get("angering_content")
+    saddening_content = data.get("saddening_content")
+    scaring_content = data.get("scaring_content")
     opinion = data.get("opinion")
     farewell = bool(data.get("farewell"))
     only_affirmation = bool(data.get("only_affirmation"))
     age = data.get("age")
-    #If new opinion is said, call get_agreement
+    #Determine mood and get mood instruction
+    mood_ins = get_mood(pleasing_content, angering_content, saddening_content, scaring_content)["ins"]
+    #If new opinion is said, determine agreement and get agreement instruction
     if opinion == "new": agreement_ins = get_agreement()["ins"]
     else: agreement_ins = ""
-    #If old conflicting opinion is said, call get_persuasion
+    #If old conflicting opinion is said, determine persuasion and get persuasion instruction
     if opinion == "old_conflicting": persuasion_ins = get_persuasion()["ins"]
     else: persuasion_ins = ""
-    #If no farewell is said, call get_topic_change
-    if farewell == False: topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
-    else: topic_change_ins = ""
+    #If no farewell is said, determine topic change and get topic change instruction
+    if farewell: topic_change_ins = ""
+    else: topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
     #Combine and deliver instructions to GPT
-    behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
+    behavior_instructions = f"{mood_ins}{agreement_ins}{persuasion_ins}{topic_change_ins}"
     return jsonify({"behavior_instructions": behavior_instructions})
+
+
+
+
+#Determine mood
+def get_mood(pleasing_content, angering_content, saddening_content, scaring_content):
+    #Load emotions from JSON file and rename them for efficiency
+    with open("emotions.json", "r") as f: emotions = json.load(f)
+    happiness = emotions["happiness"]
+    anger = emotions["anger"]
+    sadness = emotions["sadness"]
+    fear = emotions["fear"]
+    #Change emotions based on role play context
+    happiness += pleasing_content
+    anger += angering_content
+    sadness += saddening_content
+    fear += scaring_content
+    #Keep emotion values within limits
+    min = 0
+    max = 39
+    for emotion in emotions:
+        if emotion < min: emotion = min
+        if emotion > max: emotion = max
+    #Name emotions back and save them to JSON file
+    emotions["happiness"] = happiness
+    emotions["anger"] = anger
+    emotions["sadness"] = sadness
+    emotions["fear"] = fear
+    with open("emotions.json", "w") as f: json.dump(emotions, f, indent = 4)
+    #Write and return mood instructions
+    very_low = range(min, 9)
+    low = range(10, 19)
+    medium = range(20, 29)
+    high = range(30, max)
+    if happiness == very_low: happiness_des = "unhappy, "
+    if happiness == low: happiness_des = "somewhat happy "
+    if happiness == medium: happiness_des = "happy, "
+    if happiness == high: happiness_des = "very happy, "
+    if anger == very_low: anger_des = "not angry, "
+    if anger == low: anger_des = "somewhat angry, "
+    if anger == medium: anger_des = "angry, "
+    if anger == high: anger_des = "very angry, "
+    if sadness == very_low: sadness_des = "not sad, "
+    if sadness == low: sadness_des = "somewhat sad, "
+    if sadness == medium: sadness_des = "sad, "
+    if sadness == high: sadness_des = "very sad, "
+    if fear == very_low: fear_des = "not afraid / stressed. "
+    if fear == low: fear_des = "somewhat afraid / stressed. "
+    if fear == medium: fear_des = "afraid / stressed. "
+    if fear == high: fear_des = "very afraid / stressed. "
+    ins = f"Ensure that your character's tone fits their current mood, which is: {happiness_des}{anger_des}{sadness_des}{fear_des}"
+    return ins
 
 
 
