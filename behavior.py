@@ -121,13 +121,13 @@ def get_mood(pleasing_content, angering_content, saddening_content, scaring_cont
         else:
             adverb = "very "
         match emotion:
-            case "happiness": adjective = "happy, "
-            case "anger": adjective = "angry, "
-            case "happiness": adjective = "sad, "
-            case "fear": adjective = "afraid / stressed. "
+            case "happiness": adjective = "happy"
+            case "anger": adjective = "angry"
+            case "sadness": adjective = "sad"
+            case "fear": adjective = "afraid / stressed"
         phrase = f"{adverb}{adjective}"
         emotion_descriptions.append(phrase)
-    ins = f"Ensure that your character's behavior fits their current mood, which is: {emotion_descriptions}"
+    ins = "Ensure that your character's behavior fits their current mood, which is: " + ", ".join(emotion_descriptions) + "."
     return {"ins": ins}
 
 
