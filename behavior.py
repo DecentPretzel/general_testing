@@ -106,7 +106,8 @@ def get_mood(pleasing, angering, saddening, scaring):
     with open(emotions_path, "w") as f: json.dump(emotions, f, indent = 4)
     #Write and return mood instructions
     emotion_descriptions = []
-    for emotion, value in emotions.items():
+    for emotion in ("happiness", "anger", "sadness", "fear"):
+        value = emotions[emotion]
         if value < 10:
             if emotion == "happiness":
                 adverb = "un"
