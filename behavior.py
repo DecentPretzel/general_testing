@@ -7,14 +7,17 @@
 ##pip install flask (sometimes necessary)
 ##python3 behavior.py
 #To then run the locally running site in ngrok, open another terminal and enter this: ngrok http 5000
-
 #To make a change to the live site, save the change in the Python code first, then open a terminal and enter this: git deploy
 
 
 
+
+#Basic setup
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 import random
+import math
+
 
 
 
@@ -24,25 +27,36 @@ def index():
     return render_template("Site.html", word="Hello world.")
 
 
+
+
 #Master behavior function
 @app.route("/get_behavior", methods=["POST"])
 def get_behavior():
+    #Gather values
     data = request.get_json()
     opinion = data.get("opinion")
-    lull = bool(data.get("lull"))
+    farewell = bool(data.get("farewell"))
+    only_affirmation = bool(data.get("only_affirmation"))
     age = data.get("age")
+    #If new opinion is said, call get_agreement
     if opinion == "new": agreement_ins = get_agreement()["ins"]
     else: agreement_ins = ""
+    #If old conflicting opinion is said, call get_persuasion
     if opinion == "old_conflicting": persuasion_ins = get_persuasion()["ins"]
     else: persuasion_ins = ""
-    topic_change_ins = get_topic_change(lull, age)["ins"]
+    #If no farewell is said, call get_topic_change
+    if farewell == True: topic_change_ins = get_topic_change(only_affirmation, age)["ins"]
+    else: topic_change_ins = ""
+    #Combine and deliver instructions to GPT
     behavior_instructions = f"{agreement_ins}{persuasion_ins}{topic_change_ins}"
     return jsonify({"behavior_instructions": behavior_instructions})
 
 
 
+
 #Determine agreement
 def get_agreement():
+    #Roll to see if disagreement will occur
     normal_agreement_roll = random.randint(0, 100)
     if normal_agreement_roll <= 65: ins = ""
     else:
@@ -56,8 +70,10 @@ def get_agreement():
 
 
 
+
 #Determine persuasion
 def get_persuasion():
+    #Roll to see if persuasion will occur
     persuasion_success_roll = random.randint(0, 100)
     if persuasion_success_roll <= 50:
         persuasion_level = random.choice([25, 50, 75])
@@ -70,10 +86,13 @@ def get_persuasion():
 
 
 
+
 #Determine topic change
-def get_topic_change(lull, age):
+def get_topic_change(only_affirmation, age):
+    #Roll to see if topic change will occur
     topic_change_roll = random.randint(0, 100)
-    if (lull and topic_change_roll <= 90) or (lull == False and topic_change_roll <= 30):
+    if (only_affirmation and topic_change_roll <= 90) or (only_affirmation == False and topic_change_roll <= 30):
+        #Roll to determine frequency tier of new topic
         topic_frequency_roll = random.randint(1, 100)
         if topic_frequency_roll <= 45:
             new_topic = random.choice(["recent_story", "vent", "question"])
@@ -113,6 +132,8 @@ def get_topic_change(lull, age):
                 ins = f"Have your character mention a complaint regarding something they wish the player's character would do differently or better - {bias_ins}don't have your character introduce this topic with the word \"complain\" or \"complaint\", don't have your character repeat a previous complaint, and ensure that this new topic fits the current mood. "
     else: ins = ""
     return {"ins": ins}
+
+
 
 
 #Permission to run the site
