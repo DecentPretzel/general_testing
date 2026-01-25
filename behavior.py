@@ -1,11 +1,11 @@
 #To run the site locally, open the terminal and enter the following...
-##cd "/Users/baileyrosenberger/Documents/Sona/SonaGPT Alpha 3"
+##cd "/Users/baileyrosenberger/Documents/Sona/General Testing"
 ##deactivate
 ##rm -rf venv
 ##python3 -m venv venv
 ##source venv/bin/activate
 ##pip install flask (sometimes necessary)
-##python3 testing.py
+##python3 behavior.py
 #To then run the locally running site in ngrok, open another terminal and enter this: ngrok http 5000
 
 #To make a change to the live site, save the change in the Python code first, then open a terminal and enter this: git deploy
@@ -116,5 +116,7 @@ def get_topic_change(lull, age):
 
 
 #Permission to run the site
+import os
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
