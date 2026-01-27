@@ -175,7 +175,7 @@ def get_persuasion():
 
 
 #Determine topic change
-def get_topic_change(only_affirmation, question, age):
+def get_topic_change(only_affirmation, age):
     #Set new topics and their base likelihood scores
     topics = {
         "none": 800,
