@@ -134,6 +134,7 @@ def get_mood(pleasing, angering, saddening, scaring):
 
 #Determine agreement
 def get_agreement():
+    #Set agreement grades and their base likelihood scores
     grades = {
         "normal_agreement": 650,
         "overall_agreement": 80,
@@ -141,7 +142,9 @@ def get_agreement():
         "slight_agreement": 80,
         "no_agreement": 80
     }
+    #Choose current grade
     current_grade = random.choices(list(grades.keys()), list(grades.values()), k=1)[0]
+    #Write instructions regarding current grade
     match current_grade:
         case "normal_agreement": ins = ""
         case "overall_agreement": "Have your character mostly agree with the opinion of the user's character, but not fully. "
@@ -155,6 +158,7 @@ def get_agreement():
 
 #Determine persuasion
 def get_persuasion():
+    #Set persuasion grades and their base likelihood scores
     grades = {
         "normal_persuasion": 500,
         "overall_persuasion": 120,
@@ -162,9 +166,11 @@ def get_persuasion():
         "slight_persuasion": 120,
         "no_persuasion": 120
     }
+    #Choose current grade
     current_grade = random.choices(list(grades.keys()), list(grades.values()), k=1)[0]
+    #Write instructions regarding current grade
     match current_grade:
-        case "normal_persuasion": ""
+        case "normal_persuasion": ins = ""
         case "overall_persuasion": ins = "Have your character be mostly persuaded by the opinion of the user's character, but not fully. "
         case "half-persuasion": ins = "Have your character be half-persuaded by the opinion of the user's character. "
         case "slight_persuasion": ins = "Have your character be persuaded by the opinion of the user's character, but only slightly."
@@ -176,7 +182,7 @@ def get_persuasion():
 
 #Determine topic change
 def get_topic_change(only_affirmation, age):
-    #Set new topics and their base likelihood scores
+    #Set topics and their base likelihood scores
     topics = {
         "none": 800,
         "question": 50,
