@@ -171,12 +171,12 @@ def get_persuasion():
 def get_topic_change(only_affirmation, question, age):
     #Set new topics and their base likelihood scores
     topics = {
-        "none": 750,
+        "none": 800,
         "question": 50,
         "confiding_question":10,
         "compliment": 10,
         "complaint": 10,
-        "recent_story": 10,
+        "recent_story": 50,
         "old_story": 10,
         "gossip": 30,
         "hobby": 30,
@@ -185,7 +185,7 @@ def get_topic_change(only_affirmation, question, age):
     }
     #Increase chance of topic change if user message was only affirmation
     if only_affirmation:
-        topics["none"] -= 650
+        topics["none"] -= 700
     #Choose new topic
     new_topic = random.choices(list(topics.keys()), weights = list(topics.values()), k = 1)[0]
     #Write instructions regarding new topic
