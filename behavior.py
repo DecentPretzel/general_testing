@@ -206,7 +206,7 @@ def get_topic_change(only_affirmation, question, age):
             ins = f"Have your character compliment the user's character - {bias_ins}don't have your character introduce this topic with the word \"compliment\", don't have your character repeat a previous compliment, and ensure that this new topic fits the current mood. "
         case "complaint":
             bias_roll = random.randint(0, 100)
-            if bias_roll <= 33:
+            if bias_roll <= 66:
                 bias_level = random.randint(1, 2)
                 match bias_level:
                     case 1: bias_ins = "make the complaint somewhat twinged with personal bias befitting your character, "
