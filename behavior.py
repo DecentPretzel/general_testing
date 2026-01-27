@@ -134,17 +134,20 @@ def get_mood(pleasing, angering, saddening, scaring):
 
 #Determine agreement
 def get_agreement():
-    #Roll to see if disagreement will occur
-    normal_agreement_roll = random.randint(0, 100)
-    if normal_agreement_roll <= 65:
-        ins = ""
-    else:
-        agreement_level = random.choice([0, 25, 50, 75])
-        match agreement_level:
-            case 0: ins = "Have your character fully disagree with the opinion of the user's character. "
-            case 25: ins = "Have your character mostly disagree with the opinion of the user's character. "
-            case 50: ins = "Have your character half-agree with the opinion of the user's character. "
-            case 75: ins = "Have your character mostly agree with the opinion of the user's character, but not fully. "
+    grades = {
+        "normal_agreement": 650,
+        "overall_agreement": 80,
+        "half-agreement": 80,
+        "overall_disagreement": 80,
+        "full_disagreement": 80
+    }
+    current_grade = random.choices(list(grades.keys()), list(grades.values()), k=1)[0]
+    match current_grade:
+        case "normal_agreement": ins = ""
+        case "overall_agreement": "Have your character mostly agree with the opinion of the user's character, but not fully. "
+        case "half-agreement": "Have your character half-agree with the opinion of the user's character. "
+        case "overall_disagreement": "Have your character mostly disagree with the opinion of the user's character. "
+        case "full_disagreement": "Have your character fully disagree with the opinion of the user's character. "
     return {"ins": ins}
 
 
@@ -152,16 +155,20 @@ def get_agreement():
 
 #Determine persuasion
 def get_persuasion():
-    #Roll to see if persuasion will occur
-    persuasion_success_roll = random.randint(0, 100)
-    if persuasion_success_roll <= 50:
-        persuasion_level = random.choice([25, 50, 75])
-        match persuasion_level:
-            case 25: ins = "Have your character be persuaded by the opinion of the user's character, but only slightly. "
-            case 50: ins = "Have your character be half-persuaded by the opinion of the user's character. "
-            case 75: ins = "Have your character be mostly persuaded by the opinion of the user's character, but not fully. "
-    else:
-        ins = ""
+    grades = {
+        "normal_persuasion": 500,
+        "overall_persuasion": 120,
+        "half-persuasion": 120,
+        "slight_persuasion": 120,
+        "no_persuasion": 120
+    }
+    current_grade = random.choices(list(grades.keys()), list(grades.values()), k=1)[0]
+    match current_grade:
+        case "normal_persuasion": ""
+        case "overall_persuasion": ins = "Have your character be mostly persuaded by the opinion of the user's character, but not fully. "
+        case "half-persuasion": ins = "Have your character be half-persuaded by the opinion of the user's character. "
+        case "slight_persuasion": ins = "Have your character be persuaded by the opinion of the user's character, but only slightly."
+        case "no_persuasion": ins = "Do not have your character be persuaded by the opinion of the user's character at all."
     return {"ins": ins}
 
 
@@ -188,7 +195,7 @@ def get_topic_change(only_affirmation, question, age):
     if only_affirmation:
         topics["none"] -= 700
     #Choose new topic
-    new_topic = random.choices(list(topics.keys()), weights = list(topics.values()), k = 1)[0]
+    new_topic = random.choices(list(topics.keys()), weights = list(topics.values()), k=1)[0]
     #Write instructions regarding new topic
     match new_topic:
         case "none": ins = ""
