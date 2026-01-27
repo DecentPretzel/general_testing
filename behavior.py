@@ -138,16 +138,16 @@ def get_agreement():
         "normal_agreement": 650,
         "overall_agreement": 80,
         "half-agreement": 80,
-        "overall_disagreement": 80,
-        "full_disagreement": 80
+        "slight_agreement": 80,
+        "no_agreement": 80
     }
     current_grade = random.choices(list(grades.keys()), list(grades.values()), k=1)[0]
     match current_grade:
         case "normal_agreement": ins = ""
         case "overall_agreement": "Have your character mostly agree with the opinion of the user's character, but not fully. "
         case "half-agreement": "Have your character half-agree with the opinion of the user's character. "
-        case "overall_disagreement": "Have your character mostly disagree with the opinion of the user's character. "
-        case "full_disagreement": "Have your character fully disagree with the opinion of the user's character. "
+        case "slight_agreement": "Have your character mostly disagree with the opinion of the user's character. "
+        case "no_agreement": "Have your character fully disagree with the opinion of the user's character. "
     return {"ins": ins}
 
 
