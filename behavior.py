@@ -168,7 +168,8 @@ def get_persuasion():
 
 
 #Determine topic change
-def get_topic_change(only_affirmation, age):
+def get_topic_change(only_affirmation, question, age):
+    #Set new topics and their base likelihood scores
     topics = {
         "none": 750,
         "question": 50,
@@ -182,9 +183,12 @@ def get_topic_change(only_affirmation, age):
         "field_of_interest": 30,
         "vent": 50
     }
+    #Increase chance of topic change if user message was only affirmation
     if only_affirmation:
         topics["none"] -= 650
+    #Choose new topic
     new_topic = random.choices(list(topics.keys()), weights = list(topics.values()), k = 1)[0]
+    #Write instructions regarding new topic
     match new_topic:
         case "none": ins = ""
         case "recent_story": ins = "Have your character mention a story from earlier that day or recently - don't have your character introduce this topic with the word \"story\", don't have your character repeat a previous story, and ensure that this new topic fits the current mood. "
