@@ -192,7 +192,7 @@ def get_topic_change(only_affirmation, question, age):
     #Write instructions regarding new topic
     match new_topic:
         case "none": ins = ""
-        case "question": ins = "Have your ask a question - don't have your character introduce this question with the word \"question\", don't have your character repeat a previous question, and ensure that this question fits the current mood. "
+        case "question": ins = "Have your character ask a question - don't have your character introduce this question with the word \"question\", don't have your character repeat a previous question, and ensure that this question fits the current mood. "
         case "confiding_question": ins = "Have your character ask a question regarding something they're self-conscious about (i.e., \"Do you think I'm fat?\", \"Am I too rude?\") - don't have your character introduce this question with the word \"confide\", \"question\", or any inflection of those, don't have your character repeat a previous question, and ensure that this question fits the current mood. "
         case "compliment":
             bias_roll = random.randint(0, 100)
