@@ -176,6 +176,7 @@ def get_topic_change(only_affirmation, question, age):
         "confiding_question":10,
         "compliment": 10,
         "complaint": 10,
+        "realization": 30,
         "recent_story": 50,
         "old_story": 10,
         "gossip": 30,
@@ -191,16 +192,7 @@ def get_topic_change(only_affirmation, question, age):
     #Write instructions regarding new topic
     match new_topic:
         case "none": ins = ""
-        case "recent_story": ins = "Have your character mention a story from earlier that day or recently - don't have your character introduce this topic with the word \"story\", don't have your character repeat a previous story, and ensure that this new topic fits the current mood. "
-        case "vent": ins = "Have your character vent about something - don't have your character introduce this topic with the word \"vent\", don't have your character repeat a previous vent, and ensure that this new topic fits the current mood. "
         case "question": ins = "Have your ask a question - don't have your character introduce this question with the word \"question\", don't have your character repeat a previous question, and ensure that this question fits the current mood. "
-        case "gossip": ins = "Have your character mention gossip about one or more acquaintances - don't have your character introduce this topic with the word \"gossip\", don't have your character repeat a previous bit of gossip, and ensure that this new topic fits the current mood. "
-        case "hobby": ins = "Have your character talk about something regarding their hobby - don't have your character introduce this topic with the word \"hobby\", don't have your character repeat a previous bit about their hobby, and ensure that this new topic fits the current mood. "
-        case "field_of_interest": ins = "Have your character talk about something regarding their field of interest - don't have your character introduce this topic with the word \"field\" or \"interest\", don't have your character repeat a previous bit about their interest, and ensure that this new topic fits the current mood. "
-        case "realization": ins = "Have your character mention something they just realized - don't have your character introduce this topic with the word \"realize\", \"realization\", or any inflection of those, don't have your character repeat a previous realization, and ensure that this new topic fits the current mood. "
-        case "old_story":
-            age_in_story = random.uniform(age - age * 0.7, age - age * 0.1)
-            ins = f"Have your character mention a story from when they were {age_in_story} years old - don't have your character introduce this topic with the word \"story\", don't have your character repeat a previous story, and ensure that this new topic fits the current mood. Don't have your character mention their exact age in the story; instead, have them mention roughly how long ago it took place (i.e., \"a couple years ago\", \"a few years ago\") or when it took place (i.e., \"when I was a kid\", \"after I moved to California\", \"during the Great Depression\"). "
         case "confiding_question": ins = "Have your character ask a question regarding something they're self-conscious about (i.e., \"Do you think I'm fat?\", \"Am I too rude?\") - don't have your character introduce this question with the word \"confide\", \"question\", or any inflection of those, don't have your character repeat a previous question, and ensure that this question fits the current mood. "
         case "compliment":
             bias_roll = random.randint(0, 100)
@@ -222,6 +214,15 @@ def get_topic_change(only_affirmation, question, age):
             else:
                 bias_ins = ""
             ins = f"Have your character mention a complaint regarding something they wish the player's character would do differently or better - {bias_ins}don't have your character introduce this topic with the word \"complain\" or \"complaint\", don't have your character repeat a previous complaint, and ensure that this new topic fits the current mood. "
+        case "realization": ins = "Have your character mention something they just realized - don't have your character introduce this topic with the word \"realize\", \"realization\", or any inflection of those, don't have your character repeat a previous realization, and ensure that this new topic fits the current mood. "
+        case "recent_story": ins = "Have your character mention a story from earlier that day or recently - don't have your character introduce this topic with the word \"story\", don't have your character repeat a previous story, and ensure that this new topic fits the current mood. "
+        case "old_story":
+            age_in_story = random.uniform(age - age * 0.7, age - age * 0.1)
+            ins = f"Have your character mention a story from when they were {age_in_story} years old - don't have your character introduce this topic with the word \"story\", don't have your character repeat a previous story, and ensure that this new topic fits the current mood. Don't have your character mention their exact age in the story; instead, have them mention roughly how long ago it took place (i.e., \"a couple years ago\", \"a few years ago\") or when it took place (i.e., \"when I was a kid\", \"after I moved to California\", \"during the Great Depression\"). "
+        case "gossip": ins = "Have your character mention gossip about one or more acquaintances - don't have your character introduce this topic with the word \"gossip\", don't have your character repeat a previous bit of gossip, and ensure that this new topic fits the current mood. "
+        case "hobby": ins = "Have your character talk about something regarding their hobby - don't have your character introduce this topic with the word \"hobby\", don't have your character repeat a previous bit about their hobby, and ensure that this new topic fits the current mood. "
+        case "field_of_interest": ins = "Have your character talk about something regarding their field of interest - don't have your character introduce this topic with the word \"field\" or \"interest\", don't have your character repeat a previous bit about their interest, and ensure that this new topic fits the current mood. "
+        case "vent": ins = "Have your character vent about something - don't have your character introduce this topic with the word \"vent\", don't have your character repeat a previous vent, and ensure that this new topic fits the current mood. "
     return {"ins": ins}
 
 
