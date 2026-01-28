@@ -235,7 +235,7 @@ def get_topic_change(only_affirmation, age):
         case "gossip": ins = "Have your character mention gossip about one or more acquaintances - don't have your character introduce this topic with the word \"gossip\", don't have your character repeat a previous bit of gossip, and ensure that this new topic fits the current mood. "
         case "hobby": ins = "Have your character talk about something regarding their hobby - don't have your character introduce this topic with the word \"hobby\", don't have your character repeat a previous bit about their hobby, and ensure that this new topic fits the current mood. "
         case "field_of_interest": ins = "Have your character talk about something regarding their field of interest - don't have your character introduce this topic with the word \"field\" or \"interest\", don't have your character repeat a previous bit about their interest, and ensure that this new topic fits the current mood. "
-        case "vent": ins = "Have your character vent about something - don't have your character introduce this topic with the word \"vent\", don't have your character repeat a previous vent, and ensure that this new topic fits the current mood. "
+        case "vent": ins = "Have your character vent about something frustrating or saddening - don't have your character introduce this topic with the word \"vent\", don't have your character repeat a previous vent, and ensure that this new topic fits the current mood. "
     return {"ins": ins}
 
 
